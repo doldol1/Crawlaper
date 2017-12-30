@@ -71,6 +71,10 @@ keyword_list=['해양', '갈조류', '연어알', '감태', '우뭇가사리', '
 
 eng_keywords=['ocean','brown algae','salmon roe','kajime','Gelidiumamansii','Kjellmaniella crassifolia','abalone','Codium dichotomum', 'pearl', 'Agarum cribrosum', 'Kjellmaniella gyrata', 'caviar', 'glucosamine', 'laver', 'phaeophyta', 'Alaria esculenta', 'chlorella', 'green confertii', 'chitosan', 'laminaria', 'hijiki', 'Brown Rock Seaweed', 'Salicornia europaea Linnaeus', 'engraulis japonicus', 'Sargassum fulvellum', 'plankton', 'microalgae', 'Salicornia europaea Linnaeus', 'Undaria pinnatifida','sea cucumber', 'Undaria pinnatifida', 'seaweed', 'Caulerpa lentillifera', 'seaweed', 'starfish', 'Shark cartilage', 'spirulina', 'spirulina', 'fish collagen', 'collagen']
 
+keyword_list=['갈조류']
+
+eng_keywords=['brown algae']
+
 
 ###완료 리스트###
 ## keyword_list=['해양','갈조류','연어알','감태','우뭇가사리','개다시마','전복','개청각','진주','구멍쇠미역','참미역','캐비어','글루코사민','김','큰실말', '나래미역', '클로렐라', '납작파래', '키토산', '다시마', '톳', '돌미역', '퉁퉁마디', '멸치', '모자반', '플랑크톤', '미세조류', '함초', '미역','해삼', '미역귀', '해조', '바다포도', '상어연골', '스피룰리나', '스피루리나', '어류 콜라겐', ]
@@ -155,7 +159,9 @@ def data_refiner(total_data):
 def detail_extract(web_driver, data_list):
     bs_tmp=bs4.BeautifulSoup(web_driver.page_source, 'lxml')
     for i in range(1,len(bs_tmp.find('table', {'class':'basic_list'}).tbody.find_all('tr'))+1) :##각 세부사항 페이지를 돌 루프.. 실질적으로 노가다 필요함
-        web_driver.find_element_by_xpath("//table[@class='basic_list']/tbody/tr["+str(i)+"]/td[6]/a").click()
+        # web_driver.find_element_by_xpath("//table[@class='basic_list']/tbody/tr["+str(i)+"]/td[6]/a").click()
+        sr_btn=web_driver.find_element_by_xpath("//table[@class='basic_list']/tbody/tr["+str(i)+"]/td[6]/a")
+        web_driver.execute_script("arguments[0].click()",sr_btn)
         bs_detail=bs4.BeautifulSoup(web_driver.page_source, 'lxml')
         # if i==1:#범례?('과제고유번호', 총연구기관' 등)
             # for chart in bs_detail.find('div', {'id':'divMain'}).find_all('th'):
@@ -228,10 +234,16 @@ def extract_operator(web_driver, ntis_keyword, eng_keyword):
     point_list=['연구내용', '한글키워드', '영문키워드']
     for point in point_list: ##루프: '연구내용', '한글키워드', '영문키워드'항목에 각각 ntis_keyword삽입
         if point=="연구내용":
-            web_driver.find_element_by_id("searchMoreBtn").click()
+            
+            # web_driver.find_element_by_id("searchMoreBtn").click()
+            sr_btn=web_driver.find_element_by_id("searchMoreBtn")
+            web_driver.execute_script("arguments[0].click()",sr_btn)
+            
             web_driver.find_element_by_id("pjSum0").click()
 
-            web_driver.find_element_by_id("BT(생명공학기술)").click()
+            # web_driver.find_element_by_id("BT(생명공학기술)").click()
+            sr_btn=web_driver.find_element_by_id("BT(생명공학기술)")
+            web_driver.execute_script("arguments[0].click()",sr_btn)
             
             select_from=Select(web_driver.find_element_by_name("yrFrom_h"))
             select_from.select_by_value("2004")
@@ -249,7 +261,9 @@ def extract_operator(web_driver, ntis_keyword, eng_keyword):
             print('연구내용, 한글키워드, 영문키워드 모두 아닌 값이 발생했습니다.')
             sys.exit(1)
         
-        web_driver.find_element_by_xpath("//a[@href='javascript:goSearch();']").click()
+        # web_driver.find_element_by_xpath("//a[@href='javascript:goSearch();']").click()
+        sr_btn=web_driver.find_element_by_xpath("//a[@href='javascript:goSearch();']")
+        web_driver.execute_script("arguments[0].click()",sr_btn)
 ###################################################################
         
         bs_html=bs4.BeautifulSoup(web_driver.page_source, 'lxml')
@@ -300,20 +314,27 @@ def extract_operator(web_driver, ntis_keyword, eng_keyword):
             if page_num <= 1 or current_page > page_num :
                 pass
             else:
-                web_driver.find_element_by_link_text(str(current_page)).click()
+                # web_driver.find_element_by_link_text(str(current_page)).click()
+                sr_btn=web_driver.find_element_by_link_text(str(current_page))
+                web_driver.execute_script("arguments[0].click()",sr_btn)
 
             # assert False
             # web_driver.implicitly_wait(1)
 
 
         #검색 창 초기화
-        web_driver.find_element_by_id("searchMoreBtn").click()
+        # web_driver.find_element_by_id("searchMoreBtn").click()
+        sr_btn=web_driver.find_element_by_id("searchMoreBtn")
+        web_driver.execute_script("arguments[0].click()",sr_btn)
+        
         web_driver.find_element_by_name("searchVO.pj_cont").clear()
         web_driver.find_element_by_name("searchVO.pj_han_key").clear()
         web_driver.find_element_by_name("searchVO.pj_eng_key").clear()
         
     total_data=data_refiner(total_data)
-    web_driver.find_element_by_xpath("//div[@class='serviceHead']/ul/li[4]/a").click()
+    # web_driver.find_element_by_xpath("//div[@class='serviceHead']/ul/li[4]/a").click()
+    sr_btn=web_driver.find_element_by_id("searchMoreBtn")
+    web_driver.execute_script("arguments[0].click()",sr_btn)
     # print(total_data)    
 
      ##루프 안의 항목들은 list에 list형식으로 저장하며, 
@@ -328,7 +349,9 @@ def ntis_connect(web_driver, url, id='doldol1', pw='Fish5321671!'):
     
     ##url로 이동 
     web_driver.get(url)
-    web_driver.find_element_by_link_text("로그인").click()
+    # web_driver.find_element_by_link_text("로그인").click()
+    element=web_driver.find_element_by_link_text("로그인")
+    web_driver.execute_script("arguments[0].click()",element)
     ##id, pw 로그인
     main_window=web_driver.window_handles[0]
     web_driver.switch_to.window(web_driver.window_handles[1])
@@ -347,12 +370,12 @@ def main():
     web_driver=ntis_connect(web_driver, url)
     ##루프: 모든 키워드 검색이 끝날 때까지
     for i in range(len(keyword_list)):
-        try:
+#        try:
             # print(keyword_list[i])
-            data_extracted=extract_operator(web_driver, keyword_list[i], eng_keywords[i])##검색어 입력 및 페이지 수집(각 키워드에 대해 for문 돌림, '연구내용', '한글키워드', '영문키워드'는 한 루프에서 모두 처리)+파싱 및 텍스트 정제, 중복 데이터 처리
+        data_extracted=extract_operator(web_driver, keyword_list[i], eng_keywords[i])##검색어 입력 및 페이지 수집(각 키워드에 대해 for문 돌림, '연구내용', '한글키워드', '영문키워드'는 한 루프에서 모두 처리)+파싱 및 텍스트 정제, 중복 데이터 처리
             # print('입니다.')
-        except:
-            continue
+#        except:
+#        continue
         print('파일화')
         data_save(keyword_list[i], data_extracted)
         i+=1
