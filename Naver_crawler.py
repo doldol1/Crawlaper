@@ -102,6 +102,11 @@ target_url='https://search.naver.com/search.naver?ie=utf8&where=news&'\
 'docid=&nso=so:r,p:all,a:t&mynews=1&cluster_rank=36&start=1&refresh_start=0'
 
 
+#첫째 줄: 네이버 뉴스검색(모든 뉴스검색에 필수적으로 들어가는 요소)
+#둘째 줄: query는 검색어를 말함. ASCII를 인코딩해야 됨
+
+
+
 #url의 마지막에 있는 cluster_rank는 검색할 때마다 올라가는데, 줄여 줄 필요가 있어 보인다.
 
 class data_box:
