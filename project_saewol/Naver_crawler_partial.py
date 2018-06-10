@@ -1,4 +1,4 @@
-from Urllist import Urllist
+# from Urllist import Urllist
 from bs4 import BeautifulSoup
 import urllib.request
 import urllib.parse
@@ -8,110 +8,12 @@ import xlsxwriter
 import xlrd
 import datetime
 
-#기능성식품 전 기간, 모든 옵션 미적용
-target_url='https://search.naver.com/search.naver?where=news&'\
-'query=%EA%B8%B0%EB%8A%A5%EC%84%B1%EC%8B%9D%ED%92%88&'\
-'ie=utf8&sm=tab_opt&sort=0&photo=0&field=0&reporter_article=&pd=0&'\
-'ds=&de=&docid=&'\
-'nso=so%3Ar%2Cp%3Aall%2Ca%3Aall&mynews=1&'\
-'mson=0&refresh_start=0&related=0'
-
-target_url='https://search.naver.com/search.naver?ie=utf8&where=news&'\
-'query=%EA%B8%B0%EB%8A%A5%EC%84%B1%EC%8B%9D%ED%92%88&'\
-'sm=tab_pge&sort=0&photo=0&field=0&reporter_article=&pd=0&'\
-'ds=&de=&docid=&'\
-'nso=so:r,p:all,a:all&mynews=1&cluster_rank=22&start=1&refresh_start=0'
-
-
-#기능성식품 전 기간, 주류 언론사 옵션 적용-처음 들어갔을 때
-target_url='https://search.naver.com/search.naver?where=news&'\
-'query=%EA%B8%B0%EB%8A%A5%EC%84%B1%EC%8B%9D%ED%92%88&'\
-'ie=utf8&sm=tab_opt&sort=0&photo=0&field=0&reporter_article=&pd=3&'\
-'ds=2000.01.01&de=2017.10.16&docid=&'\
-'nso=so%3Ar%2Cp%3Afrom20000101to20171016%2Ca%3Aall&mynews=1&'\
-'mson=0&refresh_start=0&related=0'
-
-#기능성식품 전 기간, 주류 언론사 옵션 적용-2페이지로 이동
-target_url='https://search.naver.com/search.naver?ie=utf8&where=news&'\
-'query=%EA%B8%B0%EB%8A%A5%EC%84%B1%EC%8B%9D%ED%92%88&'\
-'sm=tab_pge&sort=0&photo=0&field=0&reporter_article=&pd=3&'\
-'ds=2000.01.01&de=2017.10.16&docid=&'\
-'nso=so:r,p:from20000101to20171016,a:all&mynews=1&cluster_rank=11&start=11'
-
-#기능성식품 전 기간, 주류 언론사 옵션 적용-다시 1페이지로 이동
-target_url='https://search.naver.com/search.naver?ie=utf8&where=news&'\
-'query=%EA%B8%B0%EB%8A%A5%EC%84%B1%EC%8B%9D%ED%92%88&'\
-'sm=tab_pge&sort=0&photo=0&field=0&reporter_article=&pd=3&'\
-'ds=2000.01.01&de=2017.10.16&docid=&'\
-'nso=so:r,p:from20000101to20171016,a:all&mynews=1&cluster_rank=21&start=1'
-#https://search.naver.com/search.naver?ie=utf8&where=news&query=%EA%B8%B0%EB%8A%A5%EC%84%B1%EC%8B%9D%ED%92%88&sm=tab_pge&sort=0&photo=0&field=0&reporter_article=&pd=3&ds=2000.01.01&de=2017.10.16&docid=&nso=so:r,p:from20000101to20171016,a:all&mynews=1&cluster_rank=21&start=1
-
-#파리넬리(sample news)
-target_url='https://search.naver.com/search.naver?'\
-'ie=utf8&where=news&'\
-'query=%ED%8C%8C%EB%A6%AC%EB%84%AC%EB%A6%AC&'\
-'sm=tab_pge&sort=0&photo=0&field=0&reporter_article=&pd=0&ds=&'\
-'de=&docid=&nso=so:r,p:all,a:all&mynews=0&cluster_rank=54&start=1&'\
-'refresh_start=0'
-
-target_url='https://search.naver.com/search.naver?'\
-'ie=utf8&where=news&'\
-'query=%ED%8C%8C%EB%A6%AC%EB%84%AC%EB%A6%AC&'\
-'sm=tab_pge&sort=0&photo=0&field=0&reporter_article=&pd=0&ds=&'\
-'de=&docid=&nso=so:r,p:all,a:all&mynews=0&cluster_rank=28&start=1&'\
-'refresh_start=0'
-#https://search.naver.com/search.naver?ie=utf8&where=news&query=%ED%8C%8C%EB%A6%AC%EB%84%AC%EB%A6%AC&sm=tab_pge&sort=0&photo=0&field=0&reporter_article=&pd=0&ds=&de=&docid=&nso=so:r,p:all,a:all&mynews=0&cluster_rank=54&start=1&refresh_start=0
-
-#씨프(sample news)
-# target_url='https://search.naver.com/search.naver?'\
-# 'ie=utf8&where=news&query=%EC%94%A8%ED%94%84&'\
-# 'sm=tab_pge&sort=0&photo=0&field=0&reporter_article=&pd=0&ds=&'\
-# 'de=&docid=&nso=so:r,p:all,a:all&mynews=0&cluster_rank=23&start=1&refresh_start=0'
-
-# https://search.naver.com/search.naver?ie=utf8&where=news&query=%EC%94%A8%ED%94%84&sm=tab_pge&sort=0&photo=0&field=0&reporter_article=&pd=0&ds=&de=&docid=&nso=so:r,p:all,a:all&mynews=0&cluster_rank=23&start=1&refresh_start=0
-
-# 사회적기업
-# target_url='https://search.naver.com/search.naver?'\
-# 'ie=utf8&where=news&'\
-# 'query=%EC%82%AC%ED%9A%8C%EC%A0%81%EA%B8%B0%EC%97%85&'\
-# 'sm=tab_pge&sort=0&photo=0&field=0&reporter_article=&pd=0&ds=&de=&'\
-# 'docid=&nso=so:r,p:all,a:all&mynews=1&cluster_rank=40&start=1&refresh_start=0'
-
-#모든 신문
-target_url='https://search.naver.com/search.naver?where=news&'\
-'query=%EC%82%AC%ED%9A%8C%EC%A0%81%EA%B8%B0%EC%97%85&'\
-'ie=utf8&sm=tab_opt&sort=0&photo=0&field=0&reporter_article=&pd=0&ds=&de=&'\
-'docid=&nso=so%3Ar%2Cp%3Aall%2Ca%3Aall&mynews=1&mson=0&refresh_start=0&'\
-'related=0'
-
-#주요신문만
-target_url='https://search.naver.com/search.naver?where=news&'\
-'query=%EC%82%AC%ED%9A%8C%EC%A0%81%EA%B8%B0%EC%97%85&'\
-'ie=utf8&sm=tab_opt&sort=0&photo=0&field=0&reporter_article=&pd=0&ds=&de=&'\
-'docid=&nso=so%3Ar%2Cp%3Aall%2Ca%3Aall&mynews=1&mson=0&refresh_start=0&'\
-'related=0'
-
-#어떤 조건인지 모르겠으나 랜덤하게 주요신문만 잡힐 때도 존재함, 다행이 제목+내용검색과 제목 검색은 nso=so:r,p:all,a:all과 nso=so:r,p:all,a:t로 조금씩 다름
-target_url='https://search.naver.com/search.naver?ie=utf8&where=news&'\
-'query=%EC%82%AC%ED%9A%8C%EC%A0%81%EA%B8%B0%EC%97%85&'\
-'sm=tab_pge&sort=0&photo=0&field=0&reporter_article=&pd=0&ds=&de=&'\
-'docid=&nso=so:r,p:all,a:all&mynews=1&cluster_rank=20&start=1&refresh_start=0'
-
-
-target_url='https://search.naver.com/search.naver?&where=news&'\
-'query=%EC%84%B8%EC%9B%94%ED%98%B8&'\
-'sm=tab_pge&sort=0&photo=0&field=0&reporter_article=&pd=3&'\
-'ds=2014.04.14&de=2018.03.05&docid=&nso=so:r,p:from20140414to20180305,a:all&'\
-'mynews=1&cluster_rank=35&start=1&refresh_start=0'
-
 target_url='https://search.naver.com/search.naver?&where=news&'\
 'query=%EC%84%B8%EC%9B%94%ED%98%B8&'\
 'sm=tab_pge&sort=0&photo=0&field=1&reporter_article=&pd=3&'\
 'ds=2014.04.14&de=2018.03.05&docid=&'\
 'nso=so:r,p:from20140414to20180305,a:t&mynews=1&cluster_rank=38&'\
 'start=1&refresh_start=0'
-
-
 
 
 #첫째 줄: 네이버 뉴스검색(모든 뉴스검색에 필수적으로 들어가는 요소)
@@ -179,6 +81,7 @@ class Naver_crawler:
                 
             except urllib.error.URLError as e:
                 print("Naver와 접속되지 않습니다. 다시 접속을 시도합니다.")
+                continue
                 
             bs_page=BeautifulSoup(page_code, 'lxml', from_encoding='utf-8')
 
@@ -189,6 +92,7 @@ class Naver_crawler:
             else:
                 present_page=bs_page.find('div',{'class':'paging'}).find('strong').get_text()
                 if last_page==present_page:
+                    print(str(last_page)+'마지막.')
                     print('총 페이지는 {0}입니다.'.format(present_page))
                     break
                 last_page=present_page
@@ -305,20 +209,22 @@ class Naver_datasaver:
         file_stream.close()
         return
 def main():
-    list_instance=Urllist()
+    # list_instance=Urllist()
     crawler=Naver_crawler()
     scraper=Naver_scraper()
     
-    press_cookie={'Cookie':'news_office_checked=1032,1005,2312,1020,2385,1021,1081,1022,2268,1023,1025,1028,1469'}
+    press_cookie={'Cookie':'news_office_checked=1032,1020,1028'}
     
-    the_list=list_instance.search_composer(target_url, start=datetime.date(2014,4,14))#총 url list추출
     
-    print('리스트 측정이 끝났습니다.')
+    file_instance=open('urllist.txt', 'r')
+    the_list=file_instance.read().split('\n')
+
     # the_list=Urllist.search_composer(target_url) #만약 static method라면
     
 
     
     for list_url in the_list:#search_composer에서 추출한 url list에서 
+        print(list_url)
         source_stack=crawler.crawling(list_url, press_cookie)
         
         databox_list=scraper.scraping(source_stack)

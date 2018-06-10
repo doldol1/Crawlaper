@@ -96,15 +96,20 @@ class Urllist:
         return news_count
         
     
-    def search_composer(self, target_url, url_list=None, start=datetime.date(2000,1,1), end=datetime.date.today()):
+    def search_composer(self, target_url, press_codes, url_list=None, start=datetime.date(2000,1,1), end=datetime.date.today()):
         
         url_list=url_list if url_list is not None else list()
+        
+
         if end>datetime.date.today():
             end=datetime.date.today()
         composed_url=self.url_changer(target_url, start, end)
         
         html=None
-        press_cookie={'Cookie':'news_office_checked=1032,1005,2312,1020,2385,1021,1081,1022,2268,1023,1025,1028,1469'}
+        if press_codes == 'daily_press':
+            press_cookie={'Cookie':'news_office_checked=1032,1005,2312,1020,2385,1021,1081,1022,2268,1023,1025,1028,1469'}
+        else:
+            press_cookie={'Cookie': 'news_office_checked='}
         
         while html==None:
             try:
@@ -127,7 +132,7 @@ class Urllist:
                 print('검색 결과값이 존재하지 않습니다.')
                 return url_list
             else:#여기에만 없음
-                return self.search_composer(composed_url, url_list, start, start+pivot*1.5)
+                return self.search_composer(composed_url, press_codes, url_list, start, start+pivot*1.5)
        
 
         else:#검색결과가 존재한다면 재귀형식으로 작동하는 알고리즘 작성
@@ -140,7 +145,7 @@ class Urllist:
             # print('{0} to {1}: {2} data is searched'.format(start, end, news_count))
             if self.MAX_RESULT<news_count:
                 print('뉴스가 '+str(news_count)+'개로 지나치게 많으니, 범위를 줄입니다.')
-                return self.search_composer(composed_url, url_list, start, start+pivot*0.7)
+                return self.search_composer(composed_url, press_codes, url_list, start, start+pivot*0.7)
             else:
                 if self.MIN_RESULT>news_count:
                     if end==datetime.date.today():
@@ -152,7 +157,7 @@ class Urllist:
                         return None
                     else:
                         print('뉴스가 '+str(news_count)+'개로 지나치게 적으니, 범위를 늘립니다.')
-                        return self.search_composer(composed_url, url_list, start, start+pivot*1.25)
+                        return self.search_composer(composed_url, press_codes, url_list, start, start+pivot*1.25)
                 else:
                     url_list.append(composed_url)
                     if end==datetime.date.today():
@@ -163,7 +168,7 @@ class Urllist:
                         return None
                     else:
                         print('{0} to {1}: {2} data is searched, append'.format(start, end, news_count))
-                        return self.search_composer(composed_url, url_list, end+datetime.timedelta(days=1), end+datetime.timedelta(days=1)+pivot*1.5)
+                        return self.search_composer(composed_url, press_codes, url_list, end+datetime.timedelta(days=1), end+datetime.timedelta(days=1)+pivot*1.5)
                         
 
 def main():

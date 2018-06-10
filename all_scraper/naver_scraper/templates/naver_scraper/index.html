@@ -1,0 +1,43 @@
+﻿<h1>네이버 크롤러/스크래퍼에 오신 것을 환영합니다!</h1>
+    <form action="{% url 'naver_scraper:naver_crawling' %}" method="post"}>
+    {% csrf_token %}
+        <ul>
+            <li>
+                검색어
+                <input type="search" name="key_word" id="key_word" />
+                <input type="submit" value="검색">
+            </li>
+            <li>
+                정확어
+                <input type="search" name="essential_word" id="essential_word" />
+            </li>
+            <li>
+                필수어
+                <input type="search" name="exact_word" id="exact_word" />
+            </li>
+            <li>
+                제외어
+                <input type="search" name="except_word" id="except_word" />
+            </li>
+            <li>
+                시작일
+                <input type="date" name="ds" id="ds" />
+                ~
+                종료일
+                <input type="date" name="de" id="de"  />
+            </li>
+            <li>
+                언론사
+                <input type="radio" name="press_codes" id="whole_press" value="whole_press"/><label for="whole_press">전체언론사</label>
+            
+                <input type="radio" name="press_codes" id="daily_press" value="daily_press" checked='checked' /><label for="daily_press">종합주간지</label>
+            </li>
+            <li>
+                검색 모드
+                <input type="radio" name="search_mode" id="all_thing" value="all_thing" checked="checked" /><label for="all_thing">제목과 본문</label>
+                
+                <input type="radio" name="search_mode" id="just_subject" value="just_subject" /><label for="just_subject">제목만</label>
+            </li>
+        </ul>
+    </form>
+    <p>현재 커스터마이징의 한계로, 종합주간지 기능만 지원합니다.</p>

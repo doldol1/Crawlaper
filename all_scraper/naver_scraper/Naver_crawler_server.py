@@ -1,4 +1,4 @@
-from Urllist import Urllist
+from . import Urllist_server
 from bs4 import BeautifulSoup
 import urllib.request
 import urllib.parse
@@ -268,6 +268,7 @@ class Naver_datasaver:
                 self.query_name=splited_url[splited].replace('query=','')
                 # self.query_name=self.query_name.decode()
                 self.query_name=urllib.parse.unquote(urllib.parse.unquote(self.query_name))
+                self.query_name=self.query_name.split('+')[0]
             else:
                 pass
         
@@ -296,7 +297,7 @@ class Naver_datasaver:
     def save_csv(self, databox_list):
         print('저장을 시작합니다.')
         # self.saver_name=self.saver_name+'.csv'
-        file_stream=open(self.saver_name, 'w', encoding='utf-8')
+        file_stream=open(os.getcwd()+'//'+self.saver_name, 'w', encoding='utf-8')
         for data_chunk in databox_list:
 
             

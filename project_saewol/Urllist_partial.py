@@ -32,6 +32,13 @@ target_url='https://search.naver.com/search.naver?where=news&'\
 'nso=so%3Ar%2Cp%3Aall%2Ca%3Aall&mynews=1&'\
 'mson=0&refresh_start=0&related=0'
 
+target_url='https://search.naver.com/search.naver?&where=news&'\
+'query=%EC%84%B8%EC%9B%94%ED%98%B8&'\
+'sm=tab_pge&sort=0&photo=0&field=0&reporter_article=&pd=3&'\
+'ds=2014.04.14&de=2018.03.05&docid=&'\
+'nso=so:r,p:from20140414to20180305,a:all&mynews=1&'\
+'cluster_rank=31&start=1&refresh_start=0'
+
 
 #############값의 입력(언론사를 제외하고) ###############
 ## ds: 시작일
@@ -104,7 +111,8 @@ class Urllist:
         composed_url=self.url_changer(target_url, start, end)
         
         html=None
-        press_cookie={'Cookie':'news_office_checked=1032,1005,2312,1020,2385,1021,1081,1022,2268,1023,1025,1028,1469'}
+        #경향, 동아, 한겨레만
+        press_cookie={'Cookie':'news_office_checked=1032,1020,1028'}
         
         while html==None:
             try:
@@ -168,13 +176,14 @@ class Urllist:
 
 def main():
     
-    file_instance=('urllist.txt', 'w')
+    ##실수 방지를 위한 주석
+    file_instance=open('urllist.txt', 'w')
     listed=Urllist()
-    the_list=listed.search_composer(target_url)
+    the_list=listed.search_composer(target_url, start=datetime.date(2014,4,1))
     
     for url in the_list:
         file_instance.write(url)
-        file_instance.write(',')
+        file_instance.write('\n')
     
             
 if __name__=='__main__':

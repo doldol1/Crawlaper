@@ -1,0 +1,2 @@
+https://search.naver.com/search.naver?&where=news&query=%EC%84%B8%EC%9B%94%ED%98%B8&sm=tab_pge&sort=0&photo=0&field=0&reporter_article=&pd=3&ds=2017.03.19&de=2017.09.25&docid=&nso=so:r,p:from20170319to20170925%2Ca%3Aall&mynews=1&cluster_rank=31&start=1&refresh_start=0
+https://search.naver.com/search.naver?&where=news&query=%EC%84%B8%EC%9B%94%ED%98%B8&sm=tab_pge&sort=0&photo=0&field=0&reporter_article=&pd=3&ds=2017.09.26&de=2018.03.05&docid=&nso=so:r,p:from20170926to20180305%2Ca%3Aall&mynews=1&cluster_rank=31&start=1&refresh_start=0
